@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
-import { FaLock, FaPhone, FaUser } from 'react-icons/fa'
-import { toast } from 'react-toastify'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { FaLock, FaPhone } from 'react-icons/fa'
+import { login } from '../features/auth/authSlice'
 import { users } from '../userData'
 
 const Login = () => {
-  const newUsers = [...users]
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch()
 
   const [formData, setFormData] = useState({
     phoneNumber: '',
     password: '',
-    confirmPassword: '',
   })
 
   const onChange = (e) => {
@@ -19,19 +22,32 @@ const Login = () => {
     }))
   }
 
+  const { phoneNumber, password } = formData
+
+  const { user } = useSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (user) {
+      navigate('/')
+    }
+  }, [navigate, user])
+
   const onSubmit = (e) => {
     e.preventDefault()
-    toast.info('Login Successful')
-    // if (password !== confirmPassword) {
-    //   toast.error("Passwords do not match");
-    // } else {
-    //   const userData = {
-    //     name,
-    //     email,
-    //     password,
-    //   };
-    //   dispatch(register(userData));
-    // }
+    const userData = {
+      phoneNumber,
+      password,
+      isAdmin: false,
+    }
+    if (userData) {
+      dispatch(login(userData))
+    } else {
+      alert('Spmething went wrong')
+      setFormData({
+        phoneNumber: '',
+        password: '',
+      })
+    }
   }
 
   return (
@@ -52,10 +68,11 @@ const Login = () => {
               type='number'
               className='w-full sm:w-3/4 p-3 border-b-[1px] border-solid border-[#e6e6e6]'
               id='phone-number'
-              name='phone-number'
+              name='phoneNumber'
               placeholder='Enter your phone number'
               onChange={onChange}
               required={true}
+              value={formData.phoneNumber}
             />
           </div>
           <div className='mt-24 flex items-center justify-center'>
@@ -68,6 +85,7 @@ const Login = () => {
               placeholder='Enter your password'
               onChange={onChange}
               required={true}
+              value={formData.password}
             />
           </div>
           <div className='mt-24 flex items-center justify-center'>

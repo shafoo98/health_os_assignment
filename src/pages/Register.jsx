@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import { FaLock, FaPhone, FaUser } from 'react-icons/fa'
-import { toast } from 'react-toastify'
-import { users } from '../userData'
+import React, { useEffect, useState } from 'react'
+import { FaLock, FaPhone } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { register } from '../features/auth/authSlice'
 
 const Register = () => {
-  const newUsers = [...users]
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch()
 
   const [formData, setFormData] = useState({
     phoneNumber: '',
@@ -20,6 +23,14 @@ const Register = () => {
 
   const { phoneNumber, password } = formData
 
+  const { user } = useSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (user) {
+      navigate('/')
+    }
+  }, [navigate, user])
+
   const onSubmit = (e) => {
     e.preventDefault()
     const userData = {
@@ -27,8 +38,15 @@ const Register = () => {
       password,
       isAdmin: false,
     }
-    console.log(userData)
-    // console.log(newUsers[newUsers.length - 1])
+    if (userData) {
+      dispatch(register(userData))
+    } else {
+      alert('Something went wrong')
+      setFormData({
+        phoneNumber: '',
+        password: '',
+      })
+    }
   }
 
   return (
@@ -53,6 +71,7 @@ const Register = () => {
               placeholder='Enter your phone number'
               onChange={onChange}
               required={true}
+              value={formData.phoneNumber}
             />
           </div>
           <div className='mt-24 flex items-center justify-center'>
@@ -65,6 +84,7 @@ const Register = () => {
               placeholder='Enter your password'
               onChange={onChange}
               required={true}
+              value={formData.password}
             />
           </div>
           <div className='mt-24 flex items-center justify-center'>

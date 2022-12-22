@@ -1,7 +1,9 @@
-import { FaSignInAlt, FaUser } from 'react-icons/fa'
+import { FaSignInAlt, FaSignOutAlt, FaUser } from 'react-icons/fa'
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '../features/auth/authSlice'
 // import { useSelector, useDispatch } from 'react-redux'
 // import { logout, reset } from '../features/auth/authSlice'
 
@@ -12,15 +14,14 @@ function Header() {
     setNav(!nav)
   }
 
-  //   const navigate = useNavigate()
-  //   const dispatch = useDispatch()
-  //   const { user } = useSelector((state) => state.auth)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.auth)
 
-  //   const onLogout = () => {
-  //     dispatch(logout())
-  //     dispatch(reset())
-  //     navigate('/')
-  //   }
+  const onLogout = () => {
+    dispatch(logout())
+    navigate('/login')
+  }
 
   return (
     <>
@@ -29,19 +30,35 @@ function Header() {
           <h1 className='w-full text-3xl font-semibold sm:mr-5'>Demo Store</h1>
         </Link>
         <ul className='hidden md:flex md:items-center md:justify-between '>
-          <li className='m-2 ml-5 font-medium'>
-            <Link className='flex items-center hover:text-[#777]' to='/login'>
-              <FaSignInAlt className='mr-[5px]' /> Login
-            </Link>
-          </li>
-          <li className='m-2 ml-5 font-medium'>
-            <Link
-              className='flex items-center hover:text-[#777]'
-              to='/register'
-            >
-              <FaUser className='mr-[5px]' /> Register
-            </Link>
-          </li>
+          {user ? (
+            <li className='m-2 ml-5 font-medium'>
+              <button
+                className='flex items-center hover:text-[#777]'
+                onClick={onLogout}
+              >
+                <FaSignOutAlt className='mr-[5px]' /> Logout
+              </button>
+            </li>
+          ) : (
+            <>
+              <li className='m-2 ml-5 font-medium'>
+                <Link
+                  className='flex items-center hover:text-[#777]'
+                  to='/login'
+                >
+                  <FaSignInAlt className='mr-[5px]' /> Login
+                </Link>
+              </li>
+              <li className='m-2 ml-5 font-medium'>
+                <Link
+                  className='flex items-center hover:text-[#777]'
+                  to='/register'
+                >
+                  <FaUser className='mr-[5px]' /> Register
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
         <div onClick={handleNav} className='block md:hidden'>
           {nav ? <AiOutlineClose size={30} /> : <AiOutlineMenu size={30} />}

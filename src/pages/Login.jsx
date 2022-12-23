@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { FaLock, FaPhone } from 'react-icons/fa'
 import { login } from '../features/auth/authSlice'
-import { users } from '../userData'
 
 const Login = () => {
   const navigate = useNavigate()

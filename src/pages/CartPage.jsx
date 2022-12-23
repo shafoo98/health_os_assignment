@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import CartProduct from '../components/CartProduct'
+import { createOrder } from '../features/orders/ordersSlice'
 
 const CartPage = () => {
   const navigate = useNavigate()
@@ -16,9 +17,27 @@ const CartPage = () => {
     .reduce((acc, item) => acc + item.price * item.quantity, 0)
     .toFixed(2)
 
+  const stringGen = () => {
+    var text = ''
+    var possible =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    for (var i = 0; i < 12; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length))
+    return text
+  }
+
   const placeOrder = () => {
-    console.log('Order Placed')
-    // Dispatch a place order here
+    const orderId = stringGen()
+    // Dispatch createOrder here
+    dispatch(
+      createOrder({
+        orderId: orderId,
+        user: user.phoneNumber,
+        orderItems: cartItems,
+        total: cartTotal,
+      })
+    )
+    navigate(`/orders/${orderId}`)
   }
 
   useEffect(() => {
@@ -45,7 +64,9 @@ const CartPage = () => {
       <h3 className=' text-2xl lg:text-4xl mt-12 mb-4 '>Total: {cartTotal}</h3>
       <button
         type='submit'
-        onClick={placeOrder}
+        onClick={() => {
+          placeOrder()
+        }}
         className='my-10 sm:w-1/2 inline-block px-6 py-4 bg-blue-700 text-white font-medium text-xs leading-normal uppercase rounded shadow-md hover:bg-blue-900 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
       >
         Place Order

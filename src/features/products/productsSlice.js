@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { products } from '../../productData'
 
 const initialState = {
-  products: products,
+  products: [],
 }
 
 const productsSlice = createSlice({
@@ -18,6 +18,7 @@ const productsSlice = createSlice({
       })
     },
     addProduct: (state, action) => {
+      products.push(action.payload)
       state.products.push(action.payload)
     },
   },

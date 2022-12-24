@@ -1,13 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { products } from '../../productData'
 
-// Run this line once and then remove
-// localStorage.setItem('storeProducts', JSON.stringify(products))
-
-const storeProducts = JSON.parse(localStorage.getItem('storeProducts'))
-
 const initialState = {
-  products: [],
+  products: products,
 }
 
 const productsSlice = createSlice({
@@ -15,7 +10,7 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     getProducts: (state) => {
-      state.products = [...storeProducts]
+      state.products = [...products]
     },
     getProductDetails: (state, action) => {
       state.products = products.filter((product) => {
@@ -23,8 +18,7 @@ const productsSlice = createSlice({
       })
     },
     addProduct: (state, action) => {
-      storeProducts.push(action.payload)
-      localStorage.setItem('storeProducts', JSON.stringify(storeProducts))
+      state.products.push(action.payload)
     },
   },
 })

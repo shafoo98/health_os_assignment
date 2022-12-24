@@ -35,7 +35,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Explanation Regarding the code
 
-Clone the github repo and then use npm run start
+Clone the github repo and then in the terminal run npm install and then write npm run start
 
 
 

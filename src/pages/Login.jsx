@@ -25,11 +25,16 @@ const Login = () => {
 
   const { user } = useSelector((state) => state.auth)
 
+  const { adminUser } = useSelector((state) => state.auth)
+
   useEffect(() => {
     if (user) {
       navigate('/')
     }
-  }, [navigate, user])
+    if (adminUser) {
+      navigate('/admin')
+    }
+  }, [adminUser, navigate, user])
 
   const onSubmit = (e) => {
     e.preventDefault()

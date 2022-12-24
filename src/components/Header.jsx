@@ -19,6 +19,8 @@ function Header() {
 
   const { user } = useSelector((state) => state.auth)
 
+  const { adminUser } = useSelector((state) => state.auth)
+
   const onLogout = () => {
     dispatch(logout())
     navigate('/login')
@@ -35,7 +37,7 @@ function Header() {
           <h1 className='w-full text-3xl font-semibold sm:mr-5'>Demo Store</h1>
         </Link>
         <ul className='hidden md:flex md:items-center md:justify-between'>
-          {user ? (
+          {user || adminUser ? (
             <div className='md:flex md:justify-evenly md:items-center'>
               <li>
                 <button
@@ -92,7 +94,7 @@ function Header() {
             </h1>
           </div>
           <ul className='uppercase pt-10 flex flex-col items-center'>
-            {user ? (
+            {user || adminUser ? (
               <div className='md:flex md:justify-evenly md:items-center'>
                 <li className='m-2 ml-5 font-medium'>
                   <button

@@ -4,8 +4,11 @@ import { users } from '../../userData'
 // Getting user from local storage
 const user = JSON.parse(localStorage.getItem('user'))
 
+const adminUser = JSON.parse(localStorage.getItem('adminUser'))
+
 const initialState = {
   user: user ? user : null,
+  adminUser: adminUser ? adminUser : null,
   error: '',
 }
 
@@ -33,15 +36,25 @@ const authSlice = createSlice({
         )
       })
       if (user) {
-        state.user = user
-        localStorage.setItem('user', JSON.stringify(action.payload))
+        if (user.isAdmin) {
+          state.adminUser = user
+          localStorage.setItem('adminUser', JSON.stringify(action.payload))
+        } else {
+          state.user = user
+          localStorage.setItem('user', JSON.stringify(action.payload))
+        }
       } else {
         state.error = 'Wrong Credentials! Please try again'
       }
     },
     logout: (state) => {
-      state.user = null
-      localStorage.removeItem('user')
+      if (state.user) {
+        state.user = null
+        localStorage.removeItem('user')
+      } else {
+        state.adminUser = null
+        localStorage.removeItem('adminUser')
+      }
     },
   },
 })

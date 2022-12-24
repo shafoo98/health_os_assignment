@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import CartProduct from '../components/CartProduct'
+import { clearCart } from '../features/cart/cartSlice'
 import { createOrder } from '../features/orders/ordersSlice'
 
 const CartPage = () => {
@@ -37,6 +38,7 @@ const CartPage = () => {
         total: cartTotal,
       })
     )
+    dispatch(clearCart())
     navigate(`/orders/${orderId}`)
   }
 

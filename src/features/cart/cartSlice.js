@@ -12,6 +12,7 @@ const cartSlice = createSlice({
   reducers: {
     clearCart: (state) => {
       state.cartItems = []
+      localStorage.removeItem('cartItems')
     },
     removeItem: (state, action) => {
       const itemId = action.payload

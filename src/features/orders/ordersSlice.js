@@ -1,10 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const allOrders = JSON.parse(localStorage.getItem('orders'))
-
 const initialState = {
-  orders: [],
-  orderById: {},
+  ordersList: [],
 }
 
 const ordersSlice = createSlice({
@@ -12,22 +9,21 @@ const ordersSlice = createSlice({
   initialState,
   reducers: {
     createOrder: (state, action) => {
-      state.orders.push(action.payload)
-      localStorage.setItem('orders', JSON.stringify(state.orders))
+      state.ordersList.push(action.payload)
+      if (!JSON.parse(localStorage.getItem('orders'))) {
+        localStorage.setItem('orders', JSON.stringify(Array.of(action.payload)))
+      } else {
+        const ordersTillNow = JSON.parse(localStorage.getItem('orders'))
+        ordersTillNow.push(action.payload)
+        localStorage.setItem('orders', JSON.stringify(ordersTillNow))
+      }
     },
     getOrders: (state) => {
-      return state.orders
-    },
-    getOrderById: (state, action) => {
-      const orderId = action.payload
-      const order = allOrders.find((order) => {
-        return order.orderId === orderId
-      })
-      state.orderById = { ...order }
+      return state.ordersList
     },
   },
 })
 
 export default ordersSlice.reducer
 
-export const { createOrder, getOrders, getOrderById } = ordersSlice.actions
+export const { createOrder, getOrders } = ordersSlice.actions
